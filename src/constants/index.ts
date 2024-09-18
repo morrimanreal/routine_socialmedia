@@ -16,13 +16,13 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "Saved",
+    route: "/calendar",
+    label: "My Calendar",
   },
   {
     imgURL: "/assets/icons/gallery-add.svg",
     route: "/create-todo-list",
-    label: "Todo List",
+    label: "Create",
   },
 ];
 
@@ -38,13 +38,18 @@ export const bottombarLinks = [
     label: "Explore",
   },
   {
-    imgURL: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "Saved",
+    imgURL: "/assets/icons/gallery-add.svg",
+    route: "/create-todo-list",
+    label: "Create",
   },
   {
-    imgURL: "/assets/icons/gallery-add.svg",
-    route: "/create-post",
-    label: "Create",
+    imgURL: "/assets/icons/people.svg",
+    route: "/all-users",
+    label: "People",
+  },
+  {
+    imgURL: "/assets/icons/bookmark.svg",
+    route: "/calendar",
+    label: "My Calendar",
   },
 ];
