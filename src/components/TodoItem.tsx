@@ -1,21 +1,32 @@
 
+import { Button } from './ui/button'
 
-const TodoItem = ({ completed, id, title, toggleTodo, deleteTodo }) => {
+const TodoItem = () => {
+
+
   return (
-    <li>
-      <label>
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={e => toggleTodo(id, e.target.checked)}
-        />
-        {title}
-      </label>
-      <Button
-        onClick={() => { deleteTodo(id) }}
-      // className="btn btn-danger"
-      > Delete </Button>
-    </li>
+    <>
+      <ul className='m-0 p-0'>
+        <li className='flex flex-row'>
+          <label>
+            <input type="checkbox" /> Take dog for a walk
+          </label>
+          <Button className='pb-6'><img src="/public/assets/icons/delete.svg" alt="delete" /></Button>
+        </li>
+        <li className='flex flex-row'>
+          <label>
+            <input type="checkbox" /> Feed dog
+          </label>
+          <Button className='pb-6'><img src="/public/assets/icons/delete.svg" alt="delete" /></Button>
+        </li>
+        <li className='flex flex-row'>
+          <label>
+            <input type="checkbox" /> Eat breakfast
+          </label>
+          <Button className='pb-6'><img src="/public/assets/icons/delete.svg" alt="delete" /></Button>
+        </li>
+      </ul>
+    </>
   )
 }
 

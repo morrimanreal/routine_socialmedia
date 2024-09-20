@@ -1,33 +1,41 @@
 import { useState } from "react"
 import { Button } from "./ui/button"
+import TodoItem from "./TodoItem"
 
-
-const NewTodoForm = (props) => {
-  const [newItem, setNewItem] = useState("")
+const NewTodoForm = () => {
+  const [newItem, setNewItem] = useState('')
+  const [todos, setTodos] = useState([])
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (newItem === "") return
-    props.onSubmit(newItem)
 
-    setNewItem("")
+    setTodos([
+      ...todos,
+      { id: crypto.randomUUID(), title: newItem, completed: false },
+    ])
   }
+
 
   return (
     <>
       <form
-        onSubmit={handleSubmit}
-        className="new-item-form">
-        <div className="form-row">
-          <label htmlFor="item">What to do?</label>
+        onSubmit={() => {
+          handleSubmit
+        }}
+        className="flex flex-col gap-2">
+        <div className="flex-row">
+          <label htmlFor="item"></label>
           <input
+            className="text-dark-4"
             value={newItem}
-            onChange={e => setNewItem(e.target.value)}
             type="text"
-            id="item" />
+            id="item"
+            onChange={(e) => setNewItem(e.target.value)}
+          />
         </div>
-        <Button className="btn">Add</Button>
+        <Button className="shad-button_dark_4">Add</Button>
       </form>
+      <TodoItem />
     </>
   )
 }
