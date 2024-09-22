@@ -1,6 +1,7 @@
-// import NewTodoForm from '@/components/NewTodoForm'
+
+import NewTodoForm from '@/components/NewTodoForm'
 import TodoList from '@/components/TodoList'
-// import TodoItem from '@/components/TodoItem'
+
 
 
 const CreateTodoList = () => {

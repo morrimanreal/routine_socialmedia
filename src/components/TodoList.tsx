@@ -1,79 +1,93 @@
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "./hooks/use-toast"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
+import { Button } from "./ui/button"
+import { v4 as uuidV4 } from "uuid"
+import { INewItem } from "@/types/interfaces"
 
-const todoSchema = z.object({
-  newItem: z.string().min(2,
-    { message: "Username must be at least 2 characters.", })
-})
+// import TodoItem from "./TodoItem"
 
-type TodoForm = z.infer<typeof todoSchema>
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-}
 
 const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [newItem, setNewItem] = useState<string>("")
+  const [todos, setTodos] = useState<INewItem[]>([])
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof todoSchema>>({
-    resolver: zodResolver(todoSchema),
-    defaultValues: {
-      newItem: "",
-    },
-  })
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-  // 2. Define a submit handler.
-  const onsubmit = (data: TodoForm) => {
-    const todoExists = todos?.some((todo) => {
-      return todo?.text?.toLowerCase() === data?.newItem?.toLowerCase();
-    });
-    if (todoExists) {
-      toast.error("Todo already exists");
-    }
-    if (!todoExists) {
-      const newTodo = { id: Date.now(), text: data.newItem, completed: false };
-      setTodos((prev) => [...prev, newTodo]);
-    }
-    reset();
+    setTodos(currentTodos => {
+      return [...currentTodos, {
+        title: newItem,
+        id: uuidV4(),
+        completed: false,
+      }]
+    })
+    setNewItem("")
   }
 
+  const toggleTodo = (id: string, completed: boolean) => {
+    setTodos(currentTodos => {
+      return currentTodos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, completed }
+        }
+        return todo
+      })
+    })
+  }
+
+  const deleteTodo = (id: string) => {
+    setTodos(currentTodos => {
+      return currentTodos.filter(todo => todo.id !== id)
+    })
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onsubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
-        <FormField
-          control={form.control}
-          name="list"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Add list</FormLabel>
-              <FormControl>
-                <Input
-                  className="shad-input" {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Add</Button>
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1 ">
+          <label
+            className=""
+            htmlFor="item">Create list</label>
+          <input
+            className="shad-input-list "
+            type="text"
+            id="item"
+            value={newItem}
+            onChange={(e: ChangeEvent<HTMLInputElement>): void => setNewItem(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2 items-center justify-end">
+          <Button className="shad-button_dark_small" type="submit">Add</Button>
+        </div>
       </form>
-    </Form>
+      <div>
+        <ul className="m-0 p-0 list-none">
+          {todos.length === 0 && "No Todos"}
+          {todos.map(todo => {
+            return (
+              <li key={todo.id}>
+                <label>
+                  <input
+                    className="mr-4"
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={e => toggleTodo(todo.id, e.target.checked)}
+                  />
+                  {todo.title}
+                  <Button
+                    onClick={() => deleteTodo(todo.id)}
+                    className="">
+                    <img src="/public/assets/icons/delete.svg" alt="delete" />
+                  </Button>
+                </label>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+
+    </>
   )
 }
 

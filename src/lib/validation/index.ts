@@ -10,3 +10,7 @@ export const SigninValidation = z.object({
   email: z.string().email(),
   password: z.string().min(8, { message: 'Password must be at least 8 characters.' })
 })
+
+export const TodoValidation = z.object({
+  newItem: z.string().min(5).max(1000)
+})
